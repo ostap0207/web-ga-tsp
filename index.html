@@ -3,8 +3,20 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/ga.js"></script>
 </head>
 <body>
+<script>
+    var points = [{x: 0, y: 0}, {x: 40, y: 50}, {x: 30, y: 1}, {x: 20, y: 40}, {x: 2, y: 10}, {x: 5, y: 5},
+        {x: 100, y: 20}, {x: 30, y: 50}, {x: 70, y: 1}, {x: 220, y: 40}, {x: 2, y: 140}, {x: 5, y: 25}
+    ];
+    GA.init(points);
+    for (var i = 0; i < 100; i++) {
+        GA.evolution();
+        console.log(GA.getBestResult());
+    }
+</script>
 
 </body>
 </html>
