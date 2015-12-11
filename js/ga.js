@@ -1,10 +1,11 @@
 var GA = {
 
     points: [],
-    crossoverRate: 0.8,
-    mutationRate: 0.01,
+    crossoverRate: 80,
+    mutationRate: 1,
     populationSize: 100,
     population: [],
+    best: null,
 
     init: function(points) {
         this.points = points;
@@ -13,10 +14,25 @@ var GA = {
     },
 
     evolution: function() {
-        var selected = this.rouletteWheelSelect(this.population);
-        this.crossover(selected);
+        var selected = this.population;
+        if (this.best != null) {
+            selected[selected.length - 1] = this.best.chromosome.clone();
+        }
+        selected = this.crossover(selected, this.tournamentSelect);
         this.mutation(selected);
         this.population = selected;
+        this.best = this.getBestResult();
+    },
+
+    tournamentSelect: function(population) {
+        var tournamentSize = 5;
+        var tournament = [];
+
+        for (var i = 0; i < tournamentSize; i++) {
+            tournament.push(population[random(population.length) - 1]);
+        }
+
+        return GA.getFittest(tournament).chromosome.clone();
     },
 
     rouletteWheelSelect: function(population) {
@@ -42,18 +58,20 @@ var GA = {
                     result.push(chromosomes[i].chromosome);
                     break;
                 }
-                result.push(chromosomes[size - 1].chromosome);
             }
         }
         return result;
     },
 
-    crossover: function(population) {
-        var size = population.length;
-        for (var i = 0; i < size - 1; i += 2) {
-            var newChromosome = this.onePointCrossover(population[i], population[i + 1]);
-            population.push(newChromosome);
+    crossover: function(population, select) {
+        var result = [];
+        while(result.length < population.length) {
+            var one = select(this.population);
+            var two = select(this.population);
+            var newChromosome = this.twoPointCrossover(one, two);
+            result.push(newChromosome);
         }
+        return result;
     },
 
     onePointCrossover: function(one, two) {
@@ -71,6 +89,34 @@ var GA = {
         return result;
     },
 
+    twoPointCrossover: function(one, two) {
+        var r1 = this.randomPoint();
+        var r2 = this.randomPoint();
+        var from = Math.min(r1, r2);
+        var to = Math.max(r1, r2);
+        var result = [];
+
+        for (var i = from; i < to; i++) {
+            result.push(one[i])
+        }
+
+        var k = 0;
+        var j = 0;
+        while (k < from) {
+            if (!result.contains(two[j])) {
+                result.unshift(two[j]);
+                k++;
+            }
+            j++;
+        }
+        for (var j = 0; j < two.length; j++) {
+            if (!result.contains(two[j])) {
+                result.push(two[j]);
+            }
+        }
+        return result;
+    },
+
     mutation: function(population) {
         for (var i = 0; i < population.length; i++) {
             this.mutate(population[i]);
@@ -78,9 +124,13 @@ var GA = {
     },
 
     mutate: function(chromosome) {
-        if (Math.random() < this.mutationRate) {
+        if (this.best != null && this.best === chromosome) {
+            return;
+        }
+        if (random(100) < this.mutationRate) {
             var from = this.randomPoint();
             var to = this.randomPoint();
+            var before = this.calculateFitnessFor(chromosome);
             chromosome.swap(from, to);
         }
     },
@@ -118,28 +168,39 @@ var GA = {
     },
 
     getBestResult: function() {
-        var max = 0;
+        var good = this.getFittest(this.population);
+        if (this.best == null) return good;
+
+        if (this.best.fitness < good.fitness) return this.best;
+
+        return good;
+    },
+
+    getFittest: function(population) {
+        var min = 9999999999;
         var index = 0;
-        for (var i = 0; i < this.population.length; i++) {
-            var fitness = this.calculateFitnessFor(this.population[i]);
-            if (max < fitness) {
-                max = fitness;
+        for (var i = 0; i < population.length; i++) {
+            var fitness = this.calculateFitnessFor(population[i]);
+            if (min > fitness) {
+                min = fitness;
                 index = i;
             }
         }
-        return {chromosome: this.population[index], fitness: fitness};
+
+        return {chromosome: population[index], fitness: min};
     },
+
     calculateFitnessFor: function(chromosome) {
         var length = 0;
         for (var i = 0; i < chromosome.length - 1; i++) {
-            length += this.distances[chromosome[i]][chromosome[i]];
+            length += this.distances[chromosome[i]][chromosome[i + 1]];
         }
         length += this.distances[chromosome[chromosome.length - 1]][chromosome[0]];
         return length;
     },
 
     randomPoint: function() {
-        return Math.floor((Math.random() * this.points.length) + 1) - 1;
+        return random(this.points.length) - 1;
     }
 
 };

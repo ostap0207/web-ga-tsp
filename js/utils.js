@@ -25,3 +25,11 @@ Array.prototype.shuffle = function() {
         this.swap(currentIndex, randomIndex);
     }
 };
+
+Array.prototype.clone = function() {
+    return this.slice(0);
+};
+
+function random(to) {
+    return Math.floor((Math.random() * to) + 1);
+}
