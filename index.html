@@ -19,7 +19,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Project name</a>
+            <a class="navbar-brand" href="#">Web Genetic TSP</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -44,7 +44,7 @@
                         <form onsubmit="return false;">
                             <div class="form-group">
                                 <label for="amount" class="sr-only">Amount</label>
-                                <input type="number" class="form-control" id="amount" value="100" width="50" min="5"
+                                <input type="number" class="form-control" id="amount" value="50" width="50" min="5"
                                        max="100">
                             </div>
                         </form>
@@ -71,8 +71,18 @@
                         <div class="form-group">
                             <input style="width: 100%" id="mutationRate" type="number" class="slider" value="" data-slider-min="0"
                                    data-slider-max="100"
-                                   data-slider-step="1" data-slider-value="1" data-slider-orientation="horizontal"
+                                   data-slider-step="1" data-slider-value="10" data-slider-orientation="horizontal"
                                    data-slider-selection="before">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        Save the best:
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <input id="saveTheBest" type="checkbox" checked>
                         </div>
                     </div>
                 </div>
@@ -83,6 +93,15 @@
                 </div>
             </div>
             <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-6">
+                        Iterations: <span id="iterations"></span>
+                        </div>
+                    <div class="col-sm-6">
+                        Fitness: <span id="fitness"></span>
+                    </div>
+
+                </div>
                 <div>
                     <canvas style="border: 1px solid black" id="canvas" width="600" height="600"></canvas>
                 </div>

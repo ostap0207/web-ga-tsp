@@ -5,12 +5,14 @@ var GA = {
     mutationRate: 1,
     populationSize: 100,
     population: [],
+    saveTheBest: true,
     best: null,
 
     init: function(points) {
         this.points = points;
         this.calculateDistances();
         this.population = this.generatePopulation();
+        this.best = null;
     },
 
     evolution: function() {
@@ -169,7 +171,7 @@ var GA = {
 
     getBestResult: function() {
         var good = this.getFittest(this.population);
-        if (this.best == null) return good;
+        if (this.best == null || this.saveTheBest == false) return good;
 
         if (this.best.fitness < good.fitness) return this.best;
 

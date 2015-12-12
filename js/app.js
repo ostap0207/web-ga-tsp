@@ -1,34 +1,37 @@
-//var points = [{x: 0, y: 0}, {x: 40, y: 50}, {x: 30, y: 1}, {x: 20, y: 40}, {x: 2, y: 10}, {x: 5, y: 5}];
-//var ga = new GA();
-//ga.init(points);
-//ga.evolution();
-//console.log(ga.getBestResult());
 var points = [];
 
 $(document).ready(function() {
 
     $("#generateBtn").click(function() {
+        stop();
+        clearCanvas();
         var amount = $("#amount").val();
         points = generateRandomPoints(amount);
         drawPoints(points);
     });
 
-    $("#startBtn").click(function() {
-        GA.init(points);
-        var i = 0;
-        function evolution() {
-            i++;
-            for (var j = 0; j < 20; j++) {
-                GA.evolution();
-            }
-            var best = GA.best
-            console.log(best.fitness);
-            drawPath(points, best.chromosome);
-            if (i < 5000) {
-                window.requestAnimationFrame(evolution);
-            }
+    var refreshIntervalId = null;
+    var i = 0;
+    var evolution =  function() {
+        i++;
+        GA.evolution();
+        var best = GA.best;
+        $("#iterations").text(i);
+        $("#fitness").text(best.fitness);
+        drawPath(points, best.chromosome);
+    };
+
+    var stop = function() {
+        if (refreshIntervalId != null) {
+            clearInterval(refreshIntervalId);
+            i = 0;
         }
-        window.requestAnimationFrame(evolution)
+    };
+
+    $("#startBtn").click(function() {
+        stop();
+        GA.init(points);
+        refreshIntervalId = setInterval(evolution, 10);
     });
 
     $('#crossoverRate').slider()
@@ -40,5 +43,9 @@ $(document).ready(function() {
         .on("slideStop", function() {
             GA.mutationRate = $('#mutationRate').slider('getValue').val();
         });
+
+    $("#saveTheBest").click(function() {
+        GA.saveTheBest = $("#saveTheBest").is(':checked');
+    });
 
 });
