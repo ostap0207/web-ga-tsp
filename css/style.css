@@ -5,3 +5,19 @@ body {
     padding: 40px 15px;
     text-align: center;
 }
+
+.block {
+    padding-bottom: 20px;
+    text-align: left;
+}
+
+.block-heading {
+    text-align: left;
+    font-weight: bold;
+}
+
+.center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+}

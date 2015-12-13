@@ -50,29 +50,68 @@
                         </form>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        Crossover rate:
+                <div class="block">
+                    <div class="block-heading">
+                        Selection
                     </div>
-                    <div class="col-sm-8">
-                        <div class="form-group">
-                            <input style="width: 100%" id="crossoverRate" type="number" class="slider" value="" data-slider-min="0"
-                                   data-slider-max="100"
-                                   data-slider-step="1" data-slider-value="80" data-slider-orientation="horizontal"
-                                   data-slider-selection="before">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            Type:
+                        </div>
+                        <div class="col-sm-8">
+                            <select id="selectType" class="form-control">
+                                <option value="tournament"> Tournament</option>
+                                <option value="roulette">Roulette wheel</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        Mutation rate:
+                <div class="block">
+                    <div class="block-heading">
+                        Crossover
                     </div>
-                    <div class="col-sm-8">
-                        <div class="form-group">
-                            <input style="width: 100%" id="mutationRate" type="number" class="slider" value="" data-slider-min="0"
-                                   data-slider-max="100"
-                                   data-slider-step="1" data-slider-value="10" data-slider-orientation="horizontal"
-                                   data-slider-selection="before">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            Type:
+                        </div>
+                        <div class="col-sm-8">
+                            <select id="crossoverType" class="form-control">
+                                <option value="twopoint">Two point crossover</option>
+                                <option value="onepoint">One point crossover</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            Rate:
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <input id="crossoverRate" type="number" class="slider" value=""
+                                       data-slider-min="0"
+                                       data-slider-max="100"
+                                       data-slider-step="1" data-slider-value="100" data-slider-orientation="horizontal"
+                                       data-slider-selection="before">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="block">
+                    <div class="block-heading">
+                        Mutation
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            Rate:
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <input id="mutationRate" type="number" class="slider" value=""
+                                       data-slider-min="0"
+                                       data-slider-max="100"
+                                       data-slider-step="1" data-slider-value="10" data-slider-orientation="horizontal"
+                                       data-slider-selection="before">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,20 +129,26 @@
                     <div class="col-sm-4">
                         <button id="startBtn" class="btn btn-success btn-block">Start</button>
                     </div>
+                    <div class="col-sm-4">
+                        <button id="stopBtn" class="btn btn-default btn-block">Stop</button>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-8">
                 <div class="row">
                     <div class="col-sm-6">
                         Iterations: <span id="iterations"></span>
-                        </div>
+                    </div>
                     <div class="col-sm-6">
                         Fitness: <span id="fitness"></span>
                     </div>
 
                 </div>
                 <div>
-                    <canvas style="border: 1px solid black" id="canvas" width="600" height="600"></canvas>
+                    <canvas style="border: 1px solid black" id="canvas" width="500" height="300"></canvas>
+                </div>
+                <div>
+                <div id="plot" style="width:500px; height:300px" class="center"></div>
                 </div>
             </div>
         </div>
@@ -111,6 +156,7 @@
 </div>
 </body>
 <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.flot.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/bootstrap-slider.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>

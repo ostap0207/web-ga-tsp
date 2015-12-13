@@ -1,8 +1,24 @@
 var points = [];
+var results = [];
 
 $(document).ready(function() {
 
+    var graph = $("#plot");
+    var plot = function(data) {
+        $.plot(graph, data, {yaxis: {position: "fight"}});
+    };
+    plot(results);
+
+    var stop = function() {
+        if (refreshIntervalId != null) {
+            clearInterval(refreshIntervalId);
+            i = 0;
+        }
+    };
+
     $("#generateBtn").click(function() {
+        results = [];
+        plot(results);
         stop();
         clearCanvas();
         var amount = $("#amount").val();
@@ -19,19 +35,19 @@ $(document).ready(function() {
         $("#iterations").text(i);
         $("#fitness").text(best.fitness);
         drawPath(points, best.chromosome);
-    };
-
-    var stop = function() {
-        if (refreshIntervalId != null) {
-            clearInterval(refreshIntervalId);
-            i = 0;
-        }
+        results[results.length - 1].push([i, best.fitness]);
+        plot(results);
     };
 
     $("#startBtn").click(function() {
         stop();
+        results.push([]);
         GA.init(points);
-        refreshIntervalId = setInterval(evolution, 10);
+        refreshIntervalId = setInterval(evolution, 2);
+    });
+
+    $("#stopBtn").click(function() {
+        stop();
     });
 
     $('#crossoverRate').slider()
@@ -46,6 +62,14 @@ $(document).ready(function() {
 
     $("#saveTheBest").click(function() {
         GA.saveTheBest = $("#saveTheBest").is(':checked');
+    });
+
+    $("#crossoverType").change(function() {
+        GA.crossoverType = $("#crossoverType").val();
+    });
+
+    $("#selectType").change(function() {
+        GA.selectType = $("#selectType").val();
     });
 
 });
